@@ -16,6 +16,12 @@ const handleResponse = (res) => {
 
 const getAddress = (user) => {
   // write me!
+  const id = user.id;
+  const street = user.address.street;
+  const city = user.address.city;
+  const zipcode = user.address.zipcode;
+  const address = `"${id}: ${street}, ${city} ${zipcode}"`;
+  return address;
 };
 
 const handleError = (err) => error(err);
@@ -24,18 +30,34 @@ const handleError = (err) => error(err);
 
 log('fetching and processing user 9');
 // "9: Dayna Park, Bartholomebury 76495-3109"
-__;
+fetchUserById(9)
+  .then((res) => handleResponse(res))
+  .then((user) => getAddress(user))
+  .then((address) => log(address))
+  .catch((err) => error(err));
 
 log('fetching and processing user 8');
 // "8: Ellsworth Summit, Aliyaview 45169"
-__;
+fetchUserById(8)
+  .then((res) => handleResponse(res))
+  .then((user) => getAddress(user))
+  .then((address) => log(address))
+  .catch((err) => error(err));
 
 log('fetching and processing user 2');
 // "2: Victor Plains, Wisokyburgh 90566-7771"
-__;
+fetchUserById(2)
+  .then((res) => handleResponse(res))
+  .then((user) => getAddress(user))
+  .then((address) => log(address))
+  .catch((err) => error(err));
 
 log('fetching and processing user 0');
 // 404
-__;
+fetchUserById(0)
+  .then((res) => handleResponse(res))
+  .then((user) => getAddress(user))
+  .then((address) => log(address))
+  .catch((err) => error(err));
 
 log('= = = =  the call stack is empty  = = = =');

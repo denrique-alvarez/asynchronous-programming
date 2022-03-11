@@ -16,6 +16,12 @@ const handleResponse = (res) => {
 
 const getContactInfo = (user) => {
   // write me!
+  const userId = user.id;
+  const userMail = user.email;
+  const phone = user.phone;
+  const userWebSite = user.website;
+  const contactInfo = `"${userId}: ${userMail}, ${phone}, ${userWebSite}"`;
+  return contactInfo;
 };
 
 const handleError = (err) => error(err);
@@ -32,22 +38,26 @@ fetchUserById(2)
 
 log('fetching and processing user 5');
 fetchUserById(5)
-  .then(handleResponse)
-  .then(getContactInfo)
+  .then((res) => handleResponse(res))
+  .then((user) => getContactInfo(user))
   // "5: Lucio_Hettinger@annie.ca, (254)954-1289, demarco.info"
-  .then(_)
-  .catch(_);
+  .then((contactInfo) => log(contactInfo))
+  .catch((err) => error(err));
 
 log('fetching and processing user 7');
 fetchUserById(7)
-  ._(_)
-  ._(_)
+  .then((res) => handleResponse(res))
+  .then((user) => getContactInfo(user))
   // "7: Telly.Hoeger@billy.biz, 210.067.6132, elvis.io"
-  ._(_)
-  ._(_);
+  .then((contactInfo) => log(contactInfo))
+  .catch((err) => error(err));
 
 log('fetching and processing user 12 (there are only 10 users!)');
-// 404
-__;
+fetchUserById(12)
+  .then((res) => handleResponse(res))
+  .then((user) => getContactInfo(user))
+  .then((contactInfo) => log(contactInfo))
+  // 404
+  .catch((err) => error(err));
 
 log('= = = =  the call stack is empty  = = = =');
