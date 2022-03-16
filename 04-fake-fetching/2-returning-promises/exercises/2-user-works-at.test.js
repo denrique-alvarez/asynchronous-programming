@@ -9,7 +9,22 @@ const { log } = labeledLogger();
 /**
  *
  */
-const userWorksAt = () => {};
+const userWorksAt = (id = 1, company) => {
+  return fetchUserById(id)
+    .then((res) => {
+      if (!res.ok) {
+        throw new Error(`${res.status}: ${res.statusText}`);
+      }
+      return res.json();
+    })
+    .then((user) => {
+      if (company === user.company.name) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+};
 
 // --- test function ---
 
@@ -26,7 +41,7 @@ describe('userWorksAt checks if a user works at a specific company', () => {
   });
   it('user 6 does work at Considine-Lockman', () => {
     return userWorksAt(6, 'Considine-Lockman').then((actual) => {
-      expect(actual).toEqual(false);
+      expect(actual).toEqual(true);
     });
   });
   it('user 7 does not work at John Groups', () => {

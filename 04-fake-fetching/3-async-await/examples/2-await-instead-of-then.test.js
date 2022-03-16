@@ -46,6 +46,7 @@ const getName = (id = 1) => {
   });
 
   return namePromise;
+
 };
 
 /**
