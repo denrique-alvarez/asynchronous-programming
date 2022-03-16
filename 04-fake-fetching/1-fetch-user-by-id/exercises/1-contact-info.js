@@ -24,8 +24,6 @@ const getContactInfo = (user) => {
   return contactInfo;
 };
 
-const handleError = (err) => error(err);
-
 // --- use the callbacks ---
 
 log('fetching and processing user 2');

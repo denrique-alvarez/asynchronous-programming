@@ -24,7 +24,7 @@ const getAddress = (user) => {
   return address;
 };
 
-const handleError = (err) => error(err);
+// const handleError = (err) => error(err);
 
 // --- use the callbacks ---
 
