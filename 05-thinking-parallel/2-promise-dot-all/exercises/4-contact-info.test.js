@@ -1,9 +1,38 @@
 import { fetchUserById } from '../../../lib/fetch-user-by-id/index.js';
 
 /**
- *
+ * Returns an array of strings with user's contact info.
+ * 
+ * @async
+ * @param {array} ids - An array containing user's ids.
+ * @returns {Promise<array>} contactInfo - An array of strings with user's contact info.
+ * 
  */
-const contactDetails = async (ids = []) => {};
+const contactDetails = async (ids = []) => {
+  // Gather info.
+  const responsePromises = [];
+  for (let id of ids) {
+    const fetch = fetchUserById(id);
+    responsePromises.push(fetch);
+  }
+  // Wait for promises.
+  const responses = await Promise.all(responsePromises);
+  // Check status and throw error.
+  for (const res of responses) {
+    if (!res.ok) {
+      throw new Error(`${res.status}: ${res.statusText}`);
+    }
+  }
+  // Parse all promises into user data.
+  const userPromises = responses.map((res) => res.json());
+  // Wait for promises.
+  const users = await Promise.all(userPromises);
+  // Create an array of strings with contact info.
+  const contactInfo = users.map((user) => {
+    return `${user.id}. ${user.email}, ${user.phone}, ${user.website}`;
+  });
+  return contactInfo;
+};
 
 // --- --- tests --- ---
 
@@ -12,7 +41,7 @@ describe('contactDetails: returns an array of user contact details', () => {
     it('finds contact details for user 5', async () => {
       const actual = await contactDetails([5]);
       expect(actual).toEqual([
-        '5: Lucio_Hettinger@annie.ca, (254)954-1289, demarco.info',
+        '5. Lucio_Hettinger@annie.ca, (254)954-1289, demarco.info',
       ]);
     });
     it('finds contact details for users 6, 1, 2', async () => {

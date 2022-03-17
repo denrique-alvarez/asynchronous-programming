@@ -1,9 +1,37 @@
 import { fetchUserById } from '../../../lib/fetch-user-by-id/index.js';
 
 /**
+ * Returns an array of objects with user's coordinates in longitude and latitude.
+ * 
+ * @async
+ * @param {array} ids - An array containing user's ids.
+ * @returns {Promise<array>} coordinates - An array of objects with user's geo-location information.
  *
  */
-const findGeoCoordinates = async (ids = []) => {};
+const findGeoCoordinates = async (ids = []) => {
+  // Gather all user's data.
+  const responsePromises = [];
+  for (let id of ids) {
+    const nextUser = fetchUserById(id);
+    responsePromises.push(nextUser);
+  }
+  // Wait for all the promises to resolve.
+  const responses = await Promise.all(responsePromises);
+  // Check status of promises.
+  for (const res of responses) {
+    if (!res.ok) {
+      throw new Error(`${res.status}: ${res.statusText}`);
+    }
+  }
+  // Parse all resnponses into user's data promises.
+  const userPromises = responses.map((res) => res.json());
+  const users = await Promise.all(userPromises);
+  // Create an object containing latitude and longitude data.
+  const coordinates = users.map((user) => {
+    return user.address.geo;
+  });
+  return coordinates;
+};
 
 // --- --- tests --- ---
 
