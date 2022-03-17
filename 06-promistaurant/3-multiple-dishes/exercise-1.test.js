@@ -29,13 +29,30 @@ import {
  *  Complete the following code so that the test passes
  */
 
-const preparedExtras = _;
+const preparedExtras = Promise.all(
+  [extras.egg, extras.redPepper, extras.onion, extras.pineapple, extras.bambooShoots].map((e) =>
+    prepareExtra(e),
+  ),
+);
 
-const JoelPrep = _;
+const joelPrep = preparePortion(sizes.small, bases.riceNoodles)
+  .then((meal) => addVegetables(meal))
+  .then((meal) => addTopping(meal, toppings.chicken))
+  .then((meal) => addSauce(meal, sauces.youWok));
 
-const kylePrep = _;
+const kylePrep = preparePortion(sizes.medium, bases.fineNoodles)
+  .then((meal) => addVegetables(meal))
+  .then((meal) => addTopping(meal, toppings.shrimps))
+  .then((meal) => addSauce(meal, sauces.soya));
 
-const theOrder = _;
+const theOrder = Promise.all([joelPrep, kylePrep, preparedExtras])
+  .then(([jMeal, kMeal, [egg, redPepper, onion, pineapple, bambooShoots]]) =>
+    Promise.all([
+      addPreparedExtras(jMeal, [egg, redPepper, onion]),
+      addPreparedExtras(kMeal, [pineapple, bambooShoots])
+    ]),
+  )
+  .then(([jMeal, kMeal]) => Promise.all([bag(jMeal), bag(kMeal)]));
 
 theOrder
   .then(([joelsMeal, kylesMeal]) => {
