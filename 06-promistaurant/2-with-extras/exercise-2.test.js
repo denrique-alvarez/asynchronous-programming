@@ -20,16 +20,25 @@ import {
 /**
  *  Geralt wants to order the following meal:
  *
- *  A small vegetarian portion of rice noodles with satay sauce with extra spring onion, broccoli and roasted peanuts
+ *  A small vegetarian portion of fine noodles with satay sauce with extra spring onion, broccoli and roasted peanuts
  *
  *  Complete the following code so that the test passes
  */
 
-const preparedExtras = _;
+const preparedExtras = Promise.all(
+  [extras.springOnion, extras.broccoli, extras.roastedPeanuts].map((e) => prepareExtra(e)),
+);
 
-const mealWithoutExtras = _;
+const mealWithoutExtras = preparePortion(sizes.small, bases.fineNoodles)
+  .then((meal) => addVegetables(meal))
+  .then((meal) => addTopping(meal, toppings.vegetarian))
+  .then((meal) => addSauce(meal, sauces.satay));
 
-const geraltsMeal = _;
+const geraltsMeal = Promise.all([preparedExtras, mealWithoutExtras])
+  .then(([thePreparedExtras, meal]) =>
+    addPreparedExtras(meal, thePreparedExtras),
+  )
+  .then((meal) => bag(meal));
 
 geraltsMeal
   .then((theMeal) => {
